@@ -1,0 +1,204 @@
+# autocmd BufWritePost <buffer> :silent !screen -X source %
+
+#GNU screen resource file
+#USE VISUAL BELL
+vbell on
+vbell_msg Ding!
+bell_msg 'Ding! %n'
+msgwait 2
+
+term screen-256color
+
+#REPLACE CTRL-A WITH CTRL-BACKSLASH
+#escape ^\\
+
+#REPLACE CTRL-A WITH CTRL-SPACE
+escape ^@@
+
+#SET A BIG SCROLLING BUFFER
+#defscrollback 10240
+defscrollback 2048
+
+# Don't list windows as logged-in in utmp file
+deflogin off
+
+# Ignore flow-control chars xon and xoff
+# changed this from off to on for mutt's sake
+defflow on
+
+#BETTER ERROR MESSAGES
+nethack on
+
+#LET PROGRAMS LIKE VIM AND LESS USE THE ALTERNATE TERMINAL BUFFER 
+#causes bug #35757
+#altscreen on
+
+#SUPPRESS THE STARTUP MESSAGE
+startup_message off
+
+# STORE COPY BUFFER IN ~/.screen-exchange
+bufferfile $HOME/.screen-exchange
+bind . writebuf
+
+# COLOR ESCAPE CODES
+# syntax: %{=abf}
+# where a = terminal attribute
+#       b = background attribute
+#       f = foreground attribute
+#
+# Terminal Attributes
+# d    dim          u    underline
+# b    bold         r    reverse
+# s    standout     B    blinking
+#
+# Color Escapes
+# k    black        r    red
+# g    green        y    yellow
+# b    blue         m    magenta
+# c    cyan         w    white
+# d    default color
+# .    leave color unchanged
+#
+# The capitalized versions of the letter specify bright
+# colors. You can also use the pseudo-color 'i' to set just
+# the brightness and leave the color unchanged.
+
+#SET COOL CAPTION ON BOTTOM LINE
+caption always "%{= wk}%-w%{= bC}%n %t%{-}%+w %-=%{= bC}%H%{+r}%S%{-r} %l %c"
+## raspberry pi's caption
+#caption always "%{= wM}%-w%{+rb}%n %t%{= wM}%+w %-=%{=b mg}%H%{+r}%S%{=b wm} %l %c"
+
+
+sorendition BC
+
+# PASSES HARDSTATUS LINE THROUGH TO TERMINAL EMULATOR
+# Try appending this string to your PS1 variable in you shell's rc file: 
+# '\[\e]0;\h \l \W\007\]'
+# this will print the hostname, tty and cwd in the titlebar of your term's window
+termcapinfo xterm*|rxvt* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007:ti@:te@'
+hardstatus off
+
+# PLACES SCREENSHOTS IN THIS DIRECTORY INSTEAD OF THE ORIGINAL SCREEN CWD
+bind H hardcopy
+hardcopydir $HOME/.hardcopy
+
+# APPEND TO EXISTING HARDCOPY FILES
+hardcopy_append on
+
+# HOW TO HANDLE KILLED WINDOWS
+# disabling - restarted windows die of their own accord after 5 seconds
+#zombie kr onerror
+
+# MAKE SHIFT+DELETE WORK IN SCREEN
+bindkey -d "^[[3$" stuff "^[[3~"
+
+# QUICKLY LAUNCH A ROOT TERMINAL
+bind s screen sudo -i
+
+# QUICKLY LAUNCH A NEW INSTANCE OF $BROWSER
+bind b screen $BROWSER
+
+# LAUNCH $BROWSER WITH URL STORED IN PASTE REGISTER
+bind B eval "writebuf" "screen lynx+ go"
+
+# LAUNCH $BROWSER WITH SEARCH TERM STORED IN PASTE REGISTER
+bind ^B eval "writebuf" "screen lynx+ search"
+
+# LAUNCH A NEW INSTANCE OF VIM
+bind V version
+bind v screen vim
+
+# TRY TO EDIT A TWEET WITH VIM...
+# MAN SCREEN 'EVAL'
+bind t eval "screen vim -c 'source ~/.vim/macros/tweet.vim'"
+bind T eval "readbuf" "paste ."
+
+# KILL CURRENT WINDOW
+bind K kill
+
+bind ( layout prev
+bind ) layout next
+
+# START/STOP WRITING OUTPUT OF CURRENT WINDOW TO SCREENLOG.N
+#bind L log
+
+# TOGGLE THIS WINDOW'S LOGIN ENTRY IN UTMP FILE
+#bind ^L login
+bind L login
+
+# REFRESH THE SCREEN
+bind ^L redisplay
+
+# FORGOT WHAT THESE WERE FOR, COPIED FROM SPILLMAN .SCREENRC
+bind ^[
+#bind ^?
+
+# LETS YOU USE VI-LIKE MOTION KEYS TO MOVE BETWEEN SPLIT REGIONS
+bind j focus down
+bind k focus up
+bind h focus left
+bind l focus right
+bind ^J focus down
+bind ^K focus up
+
+# 'ONLY WINDOW' COMMAND LIKE VIM
+bind o only
+bind Q
+
+# KILL A REGION (LIKE VIM'S CLOSE WINDOW)
+bind C remove
+bind X
+
+# RESIZE REGIONS
+bind - resize -1
+bind + resize +1
+bind = resize =
+
+# MAKE PGUP AND PGDN WORK MORE LIKE SHIFT-PGUP AND SHIFT-PGDN DO IN XTERM
+# by entering copy mode.  You need to hit escape when you're done
+# scrolling around to get back out of copy mode
+#
+# NOTE: This only works if your terminal passes these keys through.
+# If the terminal interprets these keys itself, then you'll have to
+# see if you can disable them.
+#msgwait 0    #avoid having "copy mode aborted" message eat your next
+              #keystroke after scrolling back to the prompt
+msgminwait 0 #otherwise you have to wait 1 sec for the screen to scroll up
+#bindkey "^[[5~" eval "copy" "stuff ^u"
+bindkey -m "^[[5~" stuff ^u
+bindkey -m "^[[6~" stuff ^d
+
+# SELECT WINDOWS WITH BIG numbers with escape backtick
+bind ` command -c selectTeens
+bind -c selectTeens 0 select 10
+bind -c selectTeens 1 select 11
+bind -c selectTeens 2 select 12
+bind -c selectTeens 3 select 13
+bind -c selectTeens 4 select 14
+bind -c selectTeens 5 select 15
+bind -c selectTeens 6 select 16
+bind -c selectTeens 7 select 17
+bind -c selectTeens 8 select 18
+bind -c selectTeens 9 select 19
+bind -c selectTeens ` command -c selectTwens 
+bind -c selectTwens 0 select 20
+bind -c selectTwens 1 select 21
+bind -c selectTwens 2 select 22
+bind -c selectTwens 3 select 23
+bind -c selectTwens 4 select 24
+bind -c selectTwens 5 select 25
+bind -c selectTwens 6 select 26
+bind -c selectTwens 7 select 27
+bind -c selectTwens 8 select 28
+bind -c selectTwens 9 select 29
+
+# COPY TO & FROM REGISTERS
+# bind ^Y to copy contents of default paste register into
+# a register prompted for by screen
+bind ^Y readreg
+bind Y readreg
+
+# bind ^P to paste from a register specified in a prompt
+bind ^P process
+bind P process
+
