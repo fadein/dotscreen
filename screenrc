@@ -1,5 +1,8 @@
 # autocmd BufWritePost <buffer> :silent !screen -X source %
 
+# This is how one can set a reattach password:
+# password ODSJQf.4IJN7E    # "1234"
+
 #GNU screen resource file
 #USE VISUAL BELL
 vbell on
@@ -8,6 +11,9 @@ bell_msg 'Ding! %n'
 msgwait 2
 
 term screen-256color
+
+# detach on hangup
+autodetach on
 
 #REPLACE CTRL-A WITH CTRL-BACKSLASH
 #escape ^\\
@@ -35,6 +41,9 @@ nethack on
 
 #SUPPRESS THE STARTUP MESSAGE
 startup_message off
+
+# emulate .logout message
+pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 
 # STORE COPY BUFFER IN ~/.screen-exchange
 bufferfile $HOME/.screen-exchange
@@ -201,4 +210,3 @@ bind Y readreg
 # bind ^P to paste from a register specified in a prompt
 bind ^P process
 bind P process
-
